@@ -25,3 +25,7 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.auth-wrapper > div {
+  width: 100%;
+}
