@@ -1,5 +1,5 @@
 import { Database } from "@/types/supabase";
-import { createBrowserClient, createServerClient } from "@supabase/ssr";
+import { createBrowserClient } from "@supabase/ssr";
 
 const clientSupabase = () => {
   const supabase = createBrowserClient<Database>(
@@ -8,4 +8,4 @@ const clientSupabase = () => {
   );
   return supabase;
 };
-export default clientSupabase();
+export default clientSupabase;

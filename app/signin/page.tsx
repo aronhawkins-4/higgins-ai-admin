@@ -1,15 +1,16 @@
 "use client";
 
-import supabase from "@/app/utils/clientSupabase";
+import clientSupabase from "@/app/utils/clientSupabase";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
   const router = useRouter();
+  const supabase = clientSupabase();
   const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
     if (session) {
-      router.push("/");
+      router.push("/dashboard");
     }
   });
 

@@ -1,6 +1,15 @@
+"use client";
 export const AddCollectionButton = () => {
   return (
-    <button className="btn text-white">
+    <button
+      className="btn text-white"
+      onClick={() => {
+        const openButton = document.getElementById(
+          "collection_modal"
+        ) as HTMLDialogElement;
+        openButton.showModal();
+      }}
+    >
       <svg
         width="800px"
         height="800px"

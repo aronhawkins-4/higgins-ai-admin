@@ -17,4 +17,4 @@ const serverSupabase = () => {
   );
   return supabase;
 };
-export default serverSupabase();
+export default serverSupabase;

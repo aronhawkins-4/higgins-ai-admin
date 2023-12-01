@@ -1,9 +1,8 @@
 import { ImageResponse } from "@vercel/og";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest } from "next/server";
 
-export const config = {
-  runtime: "edge",
-};
+export const runtime = "edge";
 
 function random(min: number, max: number, seed: number) {
   return Math.floor(min + (max - min) * seed);
@@ -26,7 +25,7 @@ function randomColor(seed: number) {
   return colors[random(0, colors.length, seed)];
 }
 
-export async function GET(req: NextApiRequest) {
+export async function GET(req: NextRequest) {
   return new ImageResponse(
     (
       <svg width="100" height="100" viewBox="0 0 100 100">
