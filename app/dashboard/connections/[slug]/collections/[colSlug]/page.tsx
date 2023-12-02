@@ -5,6 +5,8 @@ import { FileUpload } from "@/app/dashboard/components/FileUpload";
 import chromaClient from "@/app/utils/chromaClient";
 import { OpenAIEmbeddingFunction } from "chromadb";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default async function CollectionPage({
   params,
@@ -14,17 +16,15 @@ export default async function CollectionPage({
   const collection = await getCollection(params.colSlug);
   const connection = await getConnection(params.slug);
   console.log(collection);
-  if (connection && connection.vector_db_url) {
-    const embedder = new OpenAIEmbeddingFunction({
-      openai_api_key: connection?.open_ai_api_key!,
-    });
-    const chroma = chromaClient(connection.vector_db_url);
-    const fetchedCol = await chroma.getCollection({
-      name: collection?.name!,
-      embeddingFunction: embedder,
-    });
-    console.log(await fetchedCol.count());
+  if (!connection || !connection.vector_db_url) {
+    toast.error("Invalid Connection");
+    redirect("/dashboard");
   }
+  if (!collection) {
+    toast.error("Invalid Collection");
+    redirect("/dashboard");
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
@@ -42,7 +42,10 @@ export default async function CollectionPage({
               <li>{params.colSlug}</li>
             </ul>
           </div>
-          <FileDropzone />
+          <FileDropzone
+            connectionSlug={params.slug}
+            collectionName={collection.name!}
+          />
         </div>
       </div>
     </main>

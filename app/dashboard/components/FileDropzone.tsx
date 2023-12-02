@@ -1,8 +1,18 @@
 "use client";
-import { useMemo } from "react";
-import Dropzone, { useDropzone } from "react-dropzone";
+import { useConnection } from "@/app/hooks/useConnection";
+import { FC, useMemo } from "react";
+import { useDropzone } from "react-dropzone";
+import { handleFileUpload } from "@/app/actions/handleFileUpload";
 
-export const FileDropzone = () => {
+interface FileDropzoneProps {
+  connectionSlug: string;
+  collectionName: string;
+}
+export const FileDropzone: FC<FileDropzoneProps> = ({
+  connectionSlug,
+  collectionName,
+}) => {
+  const connection = useConnection(connectionSlug);
   const baseStyle = {
     flex: 1,
     display: "flex",
@@ -11,7 +21,6 @@ export const FileDropzone = () => {
     padding: "48px",
     borderWidth: 1,
     borderRadius: 2,
-    // borderColor: "#666",
     borderStyle: "dashed",
     backgroundColor: "transparent",
     color: "#bdbdbd",
@@ -60,7 +69,9 @@ export const FileDropzone = () => {
   const onSubmit = () => {
     const fr = new FileReader();
     fr.onload = () => {
-      console.log(fr.result);
+      if (connection) {
+        handleFileUpload(connection, collectionName, fr.result as string);
+      }
     };
     acceptedFiles.map(async (file) => {
       fr.readAsText(file);
